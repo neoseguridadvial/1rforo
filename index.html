@@ -17,10 +17,15 @@
                         'fade-in-up': {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'pulse-slow': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
                         }
                     },
                     animation: {
                         'fade-in-up': 'fade-in-up 0.5s ease-out',
+                        'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -58,7 +63,8 @@
         import { 
           Clock, User, RotateCcw, Pencil, Download, MapPin, Calendar, Mic, Users, 
           Coffee, Award, MessageSquare, CheckCircle, Star, Layout, Heart, Camera, 
-          Trash2, PlusCircle, Briefcase, Phone, Save, Info, AlertTriangle, Link, ExternalLink 
+          Trash2, PlusCircle, Briefcase, Phone, Save, Info, AlertTriangle, Link, ExternalLink,
+          Radio
         } from 'https://esm.sh/lucide-react@0.263.1';
 
         // --- DATA SOURCE ---
@@ -90,10 +96,116 @@
           { id: 'w7', time: '11:20 - 11:30', duration: '10 min', title: 'Cierre y Retorno a Plenaria', moderator: 'Facilitadora REDIPI', description: 'Transición al auditorio principal.', icon: 'rotate' }
         ];
 
+        // --- HELPER FUNCTIONS FOR TIME ---
+        const parseTime = (timeStr) => {
+            // Formato esperado: "HH:mm"
+            if (!timeStr) return 0;
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        };
+
+        const getCurrentEventStatus = (agendaData, currentMinutes) => {
+            let current = null;
+            let next = null;
+
+            // Ordenar por si acaso
+            const sortedData = [...agendaData].sort((a, b) => parseTime(a.time.split(' - ')[0]) - parseTime(b.time.split(' - ')[0]));
+
+            for (let i = 0; i < sortedData.length; i++) {
+                const item = sortedData[i];
+                const times = item.time.split(' - ');
+                const start = parseTime(times[0]);
+                const end = parseTime(times[1]);
+
+                if (currentMinutes >= start && currentMinutes < end) {
+                    current = item;
+                    // El siguiente es el inmediatamente después
+                    next = sortedData[i + 1] || null;
+                    break; 
+                }
+                
+                if (currentMinutes < start) {
+                    // Si no hemos encontrado uno actual, el primero que sea futuro es el "siguiente"
+                    if (!next) {
+                        next = item;
+                    }
+                    break;
+                }
+            }
+            return { current, next };
+        };
+
         // --- COMPONENTS ---
+        const LiveTicker = ({ activeTab }) => {
+            const [time, setTime] = useState(new Date());
+            const [status, setStatus] = useState({ current: null, next: null });
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    const now = new Date();
+                    setTime(now);
+                    
+                    // Calcular minutos desde medianoche para comparar
+                    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                    
+                    // Elegir dataset basado en la pestaña activa
+                    const data = activeTab === 'mujeres' ? womenAgendaData : mainAgendaData;
+                    
+                    setStatus(getCurrentEventStatus(data, currentMinutes));
+                }, 1000); // Actualizar cada segundo
+
+                return () => clearInterval(timer);
+            }, [activeTab]);
+
+            const formatTime = (date) => {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            };
+
+            return (
+                <div className="sticky top-0 z-40 bg-slate-900 text-white shadow-xl border-b-4 border-orange-500 transition-all duration-300">
+                    <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        
+                        {/* Reloj */}
+                        <div className="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-inner border border-slate-700">
+                            <Clock className="w-5 h-5 text-orange-400 mr-2 animate-pulse" />
+                            <span className="text-xl font-mono font-bold tracking-wider">{formatTime(time)}</span>
+                        </div>
+
+                        {/* Estado del Evento */}
+                        <div className="flex-1 w-full sm:w-auto text-center sm:text-left flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
+                            
+                            {status.current ? (
+                                <div className="flex items-center text-orange-100 animate-fade-in-up">
+                                    <span className="flex h-3 w-3 relative mr-2">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    </span>
+                                    <span className="text-xs uppercase font-bold text-red-400 mr-2">En curso:</span>
+                                    <span className="font-semibold truncate max-w-[200px] md:max-w-xs" title={status.current.title}>
+                                        {status.current.title}
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="text-slate-400 text-sm italic">No hay actividad en curso ahora</div>
+                            )}
+
+                            {status.next && (
+                                <div className="flex items-center text-slate-300 text-sm hidden md:flex animate-fade-in-up delay-100">
+                                    <span className="text-orange-400 font-bold mr-2 text-xs uppercase">A continuación:</span>
+                                    <span className="truncate max-w-[150px] opacity-80" title={status.next.title}>
+                                        {status.next.time.split(' - ')[0]} - {status.next.title}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const StatusBadge = ({ status, onClick, type }) => {
           const isActive = status === type;
-          let baseClasses = "p-2 rounded-full transition-all duration-300 flex items-center justify-center transform hover:scale-110 z-50 relative"; // Agregado z-50
+          let baseClasses = "p-2 rounded-full transition-all duration-300 flex items-center justify-center transform hover:scale-110 z-50 relative"; 
           let activeClasses = "";
           let IconComp = null;
 
@@ -127,33 +239,10 @@
             }
           };
 
-          const getIcon = (iconName) => {
-            const props = { className: `w-6 h-6 ${colorTheme === 'purple' ? 'text-purple-500' : 'text-orange-500'}` };
-            switch(iconName) {
-              case 'mic': return <Mic {...props} />;
-              case 'users': return <Users {...props} />;
-              case 'coffee': return <Coffee {...props} />;
-              case 'award': return <Award {...props} />;
-              case 'map': return <MapPin {...props} />;
-              case 'message': return <MessageSquare {...props} />;
-              case 'lightbulb': return <Layout {...props} />;
-              case 'heart': return <Heart {...props} />;
-              case 'alert': return <AlertTriangle {...props} />;
-              case 'puzzle': return <Layout {...props} />;
-              case 'building': return <Briefcase {...props} />;
-              case 'star': return <Star {...props} />;
-              case 'flag': return <Award {...props} />;
-              case 'rotate': return <RotateCcw {...props} />;
-              case 'check': return <CheckCircle {...props} />;
-              default: return <Clock {...props} />;
-            }
-          };
-
           const themeClasses = colorTheme === 'purple' 
             ? { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-700', btn: 'bg-purple-600 hover:bg-purple-700', badge: 'bg-purple-100 text-purple-800' }
             : { bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-700', btn: 'bg-orange-500 hover:bg-orange-600', badge: 'bg-orange-100 text-orange-800' };
 
-          // CORRECCIÓN CLAVE: Quitamos la clase 'transform' que causaba conflicto
           return (
             <div className="relative w-full h-96 perspective-1000 group">
               <div className={`relative w-full h-full transition-all duration-700 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
@@ -354,6 +443,10 @@
 
           return (
             <div className="min-h-screen bg-slate-100 font-sans selection:bg-orange-200 selection:text-orange-900 pb-24">
+              
+              {/* NUEVO COMPONENTE LIVE TICKER */}
+              <LiveTicker activeTab={activeTab} />
+
               {/* LOGO STRIP */}
               <div className="bg-white py-4 px-6 flex justify-center shadow-sm relative z-30">
                 <img src="https://imgur.com/jrW2403.png" alt="Logo ANSV" className="h-16 md:h-20 object-contain" onError={(e) => e.target.style.display = 'none'} />
