@@ -23,7 +23,9 @@ import {
   Phone,
   Save,
   Info,
-  AlertTriangle
+  AlertTriangle,
+  Link,
+  ExternalLink
 } from 'lucide-react';
 
 // --- DATA SOURCE ---
@@ -533,6 +535,16 @@ export default function App() {
         doc.text(sectionTitle.toUpperCase(), 20, y + 7);
         y += 20;
 
+        // -- LINK EN EL PDF PARA SECCIÓN MUJERES --
+        if (sectionTitle === "Encuentro de Mujeres") {
+             doc.setTextColor(37, 99, 235); // Blue color link
+             doc.setFontSize(10);
+             doc.setFont("helvetica", "normal");
+             const linkUrl = "https://neoseguridadvial.github.io/1rforo/mujeres.html";
+             doc.textWithLink("Acceder a los recursos del taller (Click aquí)", 20, y, { url: linkUrl });
+             y += 10;
+        }
+
         data.forEach(item => {
             const note = notes[item.id];
             const status = activityStatus[item.id];
@@ -839,11 +851,24 @@ export default function App() {
 
            {activeTab === 'mujeres' && (
               <div className="animate-fade-in-up">
-                  <div className="bg-purple-100 border-l-4 border-purple-500 p-4 rounded-r-lg mb-8 flex items-start shadow-sm">
-                      <Layout className="w-6 h-6 text-purple-600 mr-3 mt-1" />
-                      <div>
-                          <h3 className="font-bold text-purple-900">Agenda Paralela</h3>
-                          <p className="text-purple-700 text-sm">Este encuentro se realiza simultáneamente con el Foro Nacional.</p>
+                  <div className="bg-purple-100 border-l-4 border-purple-500 p-6 rounded-r-xl mb-8 shadow-sm">
+                      <div className="flex items-start justify-between flex-col md:flex-row gap-4">
+                        <div className="flex items-start">
+                            <Layout className="w-8 h-8 text-purple-600 mr-4 mt-1" />
+                            <div>
+                                <h3 className="font-bold text-xl text-purple-900">Agenda Paralela</h3>
+                                <p className="text-purple-700 mb-2">Este encuentro se realiza simultáneamente con el Foro Nacional.</p>
+                            </div>
+                        </div>
+                        <a 
+                            href="https://neoseguridadvial.github.io/1rforo/mujeres.html" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center shadow-md"
+                        >
+                            <ExternalLink className="w-5 h-5 mr-2" />
+                            Ver Recursos del Encuentro
+                        </a>
                       </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
