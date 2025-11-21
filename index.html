@@ -1,1 +1,978 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Clock, 
+  User, 
+  RotateCcw, 
+  Pencil, 
+  Download, 
+  MapPin, 
+  Calendar,
+  Mic,
+  Users,
+  Coffee,
+  Award,
+  MessageSquare,
+  CheckCircle,
+  Star,
+  Layout,
+  Heart,
+  Camera,
+  Trash2,
+  PlusCircle,
+  Briefcase,
+  Phone,
+  Save,
+  Info,
+  AlertTriangle
+} from 'lucide-react';
 
+// --- DATA SOURCE ---
+
+const mainAgendaData = [
+  {
+    id: 'm0',
+    time: '07:30 - 08:00',
+    duration: '30 min',
+    title: 'Registro y Acreditación',
+    moderator: 'Equipo logístico REDIPI',
+    description: 'Registro de participantes presenciales y entrega de escarapelas con QR.',
+    icon: 'check'
+  },
+  {
+    id: 'm1',
+    time: '08:00 - 08:10',
+    duration: '10 min',
+    title: 'Instalación Oficial',
+    moderator: 'Representante ANSV / Maestro de ceremonias',
+    description: 'Acto protocolario, himnos y palabras de apertura.',
+    icon: 'mic'
+  },
+  {
+    id: 'm2',
+    time: '08:10 - 08:50',
+    duration: '40 min',
+    title: 'Innovación, Tecnología y Liderazgo Empresarial',
+    moderator: 'Daniel Villaveces', 
+    description: 'Vehículos seguros, infraestructura inteligente y liderazgo en gestión.',
+    icon: 'lightbulb'
+  },
+  {
+    id: 'm3',
+    time: '08:50 - 09:40',
+    duration: '50 min',
+    title: 'Socialización Iniciativas (Bloque 1)',
+    moderator: 'Líderes/as Ponentes',
+    description: 'Presentación de proyectos ganadores (5 presentaciones).',
+    icon: 'users'
+  },
+  {
+    id: 'm4',
+    time: '09:40 - 10:00',
+    duration: '20 min',
+    title: 'Pausa Activa y Networking',
+    moderator: 'Equipo logístico',
+    description: 'Disparador de conversación: logros y desafíos.',
+    icon: 'coffee'
+  },
+  {
+    id: 'm5',
+    time: '10:00 - 10:40',
+    duration: '40 min',
+    title: 'Liderazgo Comunitario y Cultural',
+    moderator: 'Sandra Milena Tapias', 
+    description: 'Liderazgo de la sociedad civil, víctimas y transformación cultural.',
+    icon: 'heart'
+  },
+  {
+    id: 'm6',
+    time: '10:40 - 11:30',
+    duration: '50 min',
+    title: 'Socialización Iniciativas (Bloque 2)',
+    moderator: 'Líderes/as Ponentes',
+    description: 'Continuación de presentación de proyectos ganadores.',
+    icon: 'users'
+  },
+  {
+    id: 'm7',
+    time: '11:30 - 12:10',
+    duration: '50 min',
+    title: 'Taller: Fortalecimiento de la Red',
+    moderator: 'Facilitador/a REDIPI',
+    description: 'Dinámica "Conectemos nuestros liderazgos" y compromisos de Red.',
+    icon: 'puzzle'
+  },
+  {
+    id: 'm8',
+    time: '12:10 - 13:40',
+    duration: '90 min',
+    title: 'Almuerzo Libre',
+    moderator: '-',
+    description: 'Tiempo libre para alimentación.',
+    icon: 'coffee'
+  },
+  {
+    id: 'm9',
+    time: '13:40 - 14:20',
+    duration: '40 min',
+    title: 'Liderazgo Gubernamental y Gobernanza',
+    moderator: 'Aida Luz Ospina', 
+    description: 'Estrategia Nacional y coordinación intersectorial.',
+    icon: 'building'
+  },
+  {
+    id: 'm10',
+    time: '14:20 - 14:40',
+    duration: '20 min',
+    title: 'Pausa Café y Networking Libre',
+    moderator: 'Equipo logístico',
+    description: 'Espacio distendido para interacción espontánea.',
+    icon: 'coffee'
+  },
+  {
+    id: 'm11',
+    time: '14:40 - 15:40',
+    duration: '60 min',
+    title: 'Panel: Liderazgos Transformadores',
+    moderator: 'Rep. ANSV (Modera) / 3 Expertos',
+    description: 'Conversatorio sobre cualidades del líder y experiencias de éxito.',
+    icon: 'mic'
+  },
+  {
+    id: 'm12',
+    time: '15:40 - 16:15',
+    duration: '35 min',
+    title: 'Socialización Iniciativas (Bloque 3)',
+    moderator: 'Líderes/as Ponentes',
+    description: 'Proyectos con reconocimiento especial.',
+    icon: 'star'
+  },
+  {
+    id: 'm13',
+    time: '16:15 - 16:45',
+    duration: '30 min',
+    title: 'Entrega de Certificados',
+    moderator: 'Rep. ANSV / Maestro de ceremonias',
+    description: 'Reconocimiento al Top 10 y entrega de certificados.',
+    icon: 'award'
+  },
+  {
+    id: 'm14',
+    time: '16:45 - 17:00',
+    duration: '15 min',
+    title: 'Cierre del Evento',
+    moderator: 'Rep. ANSV / Facilitador REDIPI',
+    description: 'Conclusiones y resultados del proceso formativo.',
+    icon: 'flag'
+  }
+];
+
+const womenAgendaData = [
+  {
+    id: 'w1',
+    time: '10:00 - 10:05',
+    duration: '5 min',
+    title: 'Bienvenida Encuentro Mujeres',
+    moderator: 'Facilitadora REDIPI',
+    description: 'Apertura guiada y conexión a sala digital.',
+    icon: 'heart'
+  },
+  {
+    id: 'w2',
+    time: '10:05 - 10:25',
+    duration: '20 min',
+    title: 'Mapa Digital: Modos de Movilidad',
+    moderator: 'Facilitadora REDIPI',
+    description: 'Cartografía colaborativa sobre cargas del cuidado y rutas poligonales.',
+    icon: 'map'
+  },
+  {
+    id: 'w3',
+    time: '10:25 - 10:40',
+    duration: '15 min',
+    title: 'Identificación de Barreras Invisibles',
+    moderator: 'Facilitadora REDIPI',
+    description: 'Análisis de riesgos y cifras ANSV con enfoque de género.',
+    icon: 'alert'
+  },
+  {
+    id: 'w4',
+    time: '10:40 - 10:55',
+    duration: '15 min',
+    title: 'Testimonios: Rutas que Inspiran',
+    moderator: 'Lideresas invitadas',
+    description: 'Narrativa testimonial y escucha activa.',
+    icon: 'message'
+  },
+  {
+    id: 'w5',
+    time: '10:55 - 11:15',
+    duration: '20 min',
+    title: 'Co-creación: Territorio que Cuida',
+    moderator: 'Facilitadora + Grupos',
+    description: 'Diseño participativo de soluciones.',
+    icon: 'users'
+  },
+  {
+    id: 'w6',
+    time: '11:15 - 11:20',
+    duration: '5 min',
+    title: 'Cierre Sonoro: Voces que Dejan Eco',
+    moderator: 'Facilitadora REDIPI',
+    description: 'Microtestimonios sonoros con IA.',
+    icon: 'mic'
+  },
+  {
+    id: 'w7',
+    time: '11:20 - 11:30',
+    duration: '10 min',
+    title: 'Cierre y Retorno a Plenaria',
+    moderator: 'Facilitadora REDIPI',
+    description: 'Transición al auditorio principal.',
+    icon: 'rotate'
+  }
+];
+
+// --- COMPONENTS ---
+
+const StatusBadge = ({ status, onClick, type }) => {
+  const isActive = status === type;
+  
+  let baseClasses = "p-2 rounded-full transition-all duration-300 flex items-center justify-center transform hover:scale-110";
+  let activeClasses = "";
+  let icon = null;
+
+  if (type === 'interested') {
+    activeClasses = isActive ? "bg-yellow-100 text-yellow-500 shadow-inner" : "text-slate-300 hover:text-yellow-400";
+    icon = <Star className={`w-5 h-5 ${isActive ? "fill-current" : ""}`} />;
+  } else if (type === 'completed') {
+    activeClasses = isActive ? "bg-green-100 text-green-600 shadow-inner" : "text-slate-300 hover:text-green-500";
+    icon = <CheckCircle className="w-5 h-5" />;
+  }
+
+  return (
+    <button 
+      onClick={(e) => { e.stopPropagation(); onClick(type); }}
+      className={`${baseClasses} ${activeClasses}`}
+      title={type === 'interested' ? "Me interesa" : "Ya lo vi / Asistí"}
+    >
+      {icon}
+    </button>
+  );
+};
+
+const FlipCard = ({ item, note, onNoteChange, isFlipped, onFlip, status, onStatusChange, photos = [], onPhotoAdd, onPhotoRemove, colorTheme = "orange" }) => {
+  const isCompleted = status === 'completed';
+  const fileInputRef = useRef(null);
+  
+  const handleCameraClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onPhotoAdd(item.id, reader.result);
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+  };
+
+  const themeClasses = colorTheme === 'purple' 
+    ? { 
+        bg: 'bg-purple-50', 
+        border: 'border-purple-100', 
+        text: 'text-purple-700', 
+        btn: 'bg-purple-600 hover:bg-purple-700',
+        badge: 'bg-purple-100 text-purple-800'
+      }
+    : { 
+        bg: 'bg-orange-50', 
+        border: 'border-orange-100', 
+        text: 'text-orange-700', 
+        btn: 'bg-orange-500 hover:bg-orange-600',
+        badge: 'bg-orange-100 text-orange-800'
+      };
+
+  return (
+    <div className="relative w-full h-96 perspective-1000 group">
+      <div 
+        className={`relative w-full h-full transition-all duration-700 transform preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}
+      >
+        {/* FRONT */}
+        <div className={`absolute w-full h-full backface-hidden bg-white rounded-2xl shadow-lg border-2 ${isCompleted ? 'border-slate-200 opacity-80' : themeClasses.border} p-6 flex flex-col justify-between transition-all duration-300`}>
+          
+          <div>
+            <div className="flex justify-between items-start mb-4">
+              <div className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleted ? 'bg-slate-100 text-slate-500' : themeClasses.badge}`}>
+                {item.duration}
+              </div>
+              <div className="flex space-x-1">
+                 <StatusBadge 
+                    status={status} 
+                    type="interested" 
+                    onClick={(type) => onStatusChange(item.id, status === type ? null : type)} 
+                 />
+                 <StatusBadge 
+                    status={status} 
+                    type="completed" 
+                    onClick={(type) => onStatusChange(item.id, status === type ? null : type)} 
+                 />
+              </div>
+            </div>
+            
+            <h3 className={`text-lg font-bold mb-2 leading-tight ${isCompleted ? 'text-slate-400 line-through decoration-2' : 'text-slate-800'}`}>
+              {item.title}
+            </h3>
+            
+            <div className={`flex items-center text-sm mb-2 ${isCompleted ? 'text-slate-300' : 'text-slate-500'}`}>
+              <Clock className="w-4 h-4 mr-2" />
+              {item.time}
+            </div>
+
+            <div className={`flex items-center text-sm ${isCompleted ? 'text-slate-300' : 'text-slate-500'}`}>
+              <User className="w-4 h-4 mr-2" />
+              <span className="truncate font-medium">{item.moderator}</span>
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-2">
+             <div className="flex items-center gap-1 flex-1 overflow-hidden">
+                {photos.length > 0 && (
+                    <div className="text-xs text-green-600 flex items-center font-medium">
+                        <Camera className="w-3 h-3 mr-1" />
+                        {photos.length} foto(s)
+                    </div>
+                )}
+                {photos.length === 0 && (
+                    <div className="text-xs text-slate-400 italic truncate">
+                       {isCompleted ? "Finalizada" : status === 'interested' ? "¡Te interesa!" : ""}
+                    </div>
+                )}
+             </div>
+             <button 
+              onClick={onFlip}
+              className={`py-2 px-4 rounded-xl text-white text-sm font-semibold flex items-center space-x-2 shadow-md transition-colors ${isCompleted ? 'bg-slate-400' : themeClasses.btn}`}
+            >
+              <Pencil className="w-3 h-3" />
+              <span>Notas</span>
+            </button>
+          </div>
+        </div>
+
+        {/* BACK */}
+        <div className={`absolute w-full h-full backface-hidden bg-slate-50 rounded-2xl shadow-xl border-2 ${themeClasses.border} p-6 rotate-y-180 flex flex-col`}>
+          <div className="flex justify-between items-center mb-2">
+            <h4 className={`font-bold ${themeClasses.text} text-sm`}>Mis Notas y Fotos</h4>
+            <button onClick={onFlip} className="text-slate-400 hover:text-slate-600">
+              <RotateCcw className="w-5 h-5" />
+            </button>
+          </div>
+          
+          <textarea
+            className="flex-1 w-full p-3 bg-white border border-slate-200 rounded-lg resize-none focus:ring-2 focus:ring-orange-200 focus:outline-none text-slate-700 text-sm placeholder:text-slate-300 mb-2"
+            placeholder="Escribe aquí tus ideas clave..."
+            value={note}
+            onChange={(e) => onNoteChange(item.id, e.target.value)}
+          />
+          
+          <div className="mt-auto border-t border-slate-200 pt-2">
+              <div className="flex gap-2 mb-2 overflow-x-auto pb-1 h-16 items-center">
+                  {photos.map((photo, idx) => (
+                      <div key={idx} className="relative flex-shrink-0 w-14 h-14 group/photo">
+                        <img src={photo} alt={`Foto ${idx}`} className="w-full h-full object-cover rounded-lg border border-slate-300 shadow-sm" />
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); onPhotoRemove(item.id, idx); }}
+                            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow-sm hover:bg-red-600"
+                            title="Borrar foto"
+                        >
+                            <Trash2 className="w-2 h-2" />
+                        </button>
+                      </div>
+                  ))}
+                  {photos.length === 0 && <span className="text-xs text-slate-400 italic w-full text-center">Sin fotos</span>}
+              </div>
+
+              <div className="flex justify-end items-center">
+                   <input 
+                      type="file" 
+                      accept="image/*" 
+                      capture="environment"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleFileChange}
+                  />
+                  <button 
+                      onClick={handleCameraClick}
+                      className="flex items-center space-x-1 text-xs font-bold bg-white border border-slate-300 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors w-full justify-center"
+                  >
+                      <Camera className="w-4 h-4" />
+                      <span>{photos.length > 0 ? 'Agregar otra foto' : 'Tomar Foto'}</span>
+                  </button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- MAIN APP ---
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('foro');
+  const [notes, setNotes] = useState({});
+  const [activityStatus, setActivityStatus] = useState({}); 
+  const [photos, setPhotos] = useState({}); 
+  const [flippedState, setFlippedState] = useState({});
+  const [finalReflection, setFinalReflection] = useState("");
+  const [contacts, setContacts] = useState([]);
+  const [newContact, setNewContact] = useState({ name: '', org: '', info: '' });
+  const [jsPDFInstance, setJsPDFInstance] = useState(null);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+    script.onload = () => {
+      setJsPDFInstance(window.jspdf);
+    };
+    document.body.appendChild(script);
+  }, []);
+
+  const handleFlip = (id) => {
+    setFlippedState(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleNoteChange = (id, value) => {
+    setNotes(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handlePhotoAdd = (id, base64) => {
+      setPhotos(prev => {
+          const currentPhotos = prev[id] || [];
+          return { ...prev, [id]: [...currentPhotos, base64] };
+      });
+  };
+
+  const handlePhotoRemove = (id, indexToRemove) => {
+      setPhotos(prev => {
+          const currentPhotos = prev[id] || [];
+          return { ...prev, [id]: currentPhotos.filter((_, idx) => idx !== indexToRemove) };
+      });
+  };
+
+  const handleStatusChange = (id, status) => {
+    setActivityStatus(prev => ({ ...prev, [id]: status }));
+  };
+
+  const handleAddContact = () => {
+      if (newContact.name.trim() === '') return;
+      setContacts([...contacts, { ...newContact, id: Date.now() }]);
+      setNewContact({ name: '', org: '', info: '' });
+  };
+
+  const handleDeleteContact = (id) => {
+      setContacts(contacts.filter(c => c.id !== id));
+  };
+
+  // --- PDF GENERATOR REFINADO ---
+  const downloadPDF = () => {
+    if (!jsPDFInstance) {
+      alert("Cargando generador PDF...");
+      return;
+    }
+
+    const { jsPDF } = jsPDFInstance;
+    const doc = new jsPDF();
+    
+    const colors = {
+        orange: [249, 115, 22], 
+        purple: [147, 51, 234], 
+        blue: [37, 99, 235],    
+        dark: [30, 41, 59],     
+        gray: [100, 116, 139],
+        lightGray: [248, 250, 252] 
+    };
+
+    // --- HEADER ---
+    doc.setFillColor(...colors.orange);
+    doc.rect(0, 0, 210, 40, 'F'); 
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text("Memorias del Evento", 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("1er Foro Nacional de Líderes y Lideresas por la Seguridad Vial", 15, 30);
+
+    let y = 55;
+
+    const checkPageBreak = (heightNeeded) => {
+        if (y + heightNeeded > 270) {
+            doc.addPage();
+            y = 20; 
+            return true;
+        }
+        return false;
+    };
+
+    const writeSection = (data, sectionTitle, themeColor) => {
+        checkPageBreak(30);
+        
+        // Título Sección
+        doc.setFillColor(...themeColor);
+        doc.rect(15, y, 180, 10, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(sectionTitle.toUpperCase(), 20, y + 7);
+        y += 20;
+
+        data.forEach(item => {
+            const note = notes[item.id];
+            const status = activityStatus[item.id];
+            const itemPhotos = photos[item.id] || [];
+            
+            if ((note && note.trim().length > 0) || status || itemPhotos.length > 0) {
+                
+                let contentHeight = 20; 
+                let noteHeight = 0;
+                let photoHeight = 0;
+                
+                let splitNotes = [];
+                if (note && note.trim().length > 0) {
+                     splitNotes = doc.splitTextToSize(note, 165); 
+                     noteHeight = (splitNotes.length * 5) + 15;
+                     contentHeight += noteHeight;
+                }
+
+                if (itemPhotos.length > 0) {
+                    const rows = Math.ceil(itemPhotos.length / 2);
+                    photoHeight = (rows * 60) + 5;
+                    contentHeight += photoHeight;
+                }
+
+                checkPageBreak(contentHeight + 10);
+
+                // Línea vertical decorativa
+                doc.setDrawColor(...themeColor);
+                doc.setLineWidth(0.5);
+                doc.line(15, y, 15, y + contentHeight);
+                doc.setFillColor(...themeColor);
+                doc.circle(15, y, 2, 'F'); 
+
+                // Info
+                doc.setTextColor(...colors.gray);
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text(item.time, 22, y + 1);
+
+                let statusText = "";
+                if (status === 'interested') statusText = "⭐ Interés";
+                if (status === 'completed') statusText = "✅ Asistió";
+                
+                if (statusText) {
+                    doc.setFont("helvetica", "italic");
+                    doc.setFontSize(9);
+                    doc.setTextColor(...themeColor);
+                    const timeWidth = doc.getTextWidth(item.time);
+                    doc.text(statusText, 22 + timeWidth + 5, y + 1);
+                }
+
+                y += 6;
+
+                // Título Item
+                doc.setTextColor(...colors.dark);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                const splitTitle = doc.splitTextToSize(item.title, 165);
+                doc.text(splitTitle, 22, y);
+                y += (splitTitle.length * 6) + 2;
+
+                // Bloque de Notas
+                if (splitNotes.length > 0) {
+                    doc.setFillColor(...colors.lightGray);
+                    // Dibujar rectángulo de fondo
+                    doc.rect(22, y, 170, noteHeight - 5, 'F');
+                    
+                    doc.setTextColor(...colors.dark);
+                    doc.setFontSize(10);
+                    doc.setFont("helvetica", "normal");
+                    doc.text(splitNotes, 25, y + 6); // Padding
+                    y += noteHeight;
+                }
+
+                // Bloque de Fotos
+                if (itemPhotos.length > 0) {
+                     itemPhotos.forEach((photo, idx) => {
+                         let xPos = 22 + ((idx % 2) * 88);
+                         let currentRow = Math.floor(idx / 2);
+                         let yPos = y + (currentRow * 60);
+
+                         try {
+                            doc.addImage(photo, 'JPEG', xPos, yPos, 80, 50);
+                         } catch (e) {
+                             console.error("Error imagen", e);
+                         }
+                     });
+                     y += photoHeight;
+                }
+                
+                y += 8;
+            }
+        });
+        y += 10;
+    };
+
+    // Renderizado
+    writeSection(mainAgendaData, "Agenda Foro Nacional", colors.orange);
+    writeSection(womenAgendaData, "Encuentro de Mujeres", colors.purple);
+
+    if (contacts.length > 0) {
+        checkPageBreak(40);
+        doc.setFillColor(...colors.blue);
+        doc.rect(15, y, 180, 10, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text("RED DE CONTACTOS", 20, y + 7);
+        y += 20;
+
+        contacts.forEach(c => {
+            checkPageBreak(25);
+            doc.setDrawColor(...colors.blue);
+            doc.setLineWidth(0.5);
+            doc.rect(15, y, 180, 20);
+            
+            doc.setFillColor(...colors.blue);
+            doc.rect(15, y, 5, 20, 'F');
+
+            doc.setTextColor(...colors.dark);
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "bold");
+            doc.text(c.name, 25, y + 7);
+            
+            doc.setTextColor(...colors.gray);
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text(`${c.org} | ${c.info}`, 25, y + 14);
+            
+            y += 25;
+        });
+    }
+
+    if (finalReflection.trim().length > 0) {
+        checkPageBreak(50);
+        
+        doc.setDrawColor(...colors.orange);
+        doc.setLineWidth(1);
+        doc.rect(15, y, 180, 40);
+        
+        doc.setTextColor(...colors.orange);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("¿Qué me queda del evento?", 20, y + 10);
+        
+        doc.setTextColor(...colors.dark);
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "italic");
+        const splitReflect = doc.splitTextToSize(finalReflection, 170);
+        doc.text(splitReflect, 20, y + 20);
+    }
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`Página ${i} de ${pageCount}`, 195, 290, null, null, "right");
+    }
+
+    doc.save("Memorias_Foro_Seguridad_Vial.pdf");
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 font-sans selection:bg-orange-200 selection:text-orange-900">
+      
+      <style>{`
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .preserve-3d { transform-style: preserve-3d; }
+      `}</style>
+
+      {/* LOGO STRIP */}
+      <div className="bg-white py-4 px-6 flex justify-center shadow-sm relative z-30">
+        <img 
+          src="https://imgur.com/jrW2403.png" 
+          alt="Logo ANSV" 
+          className="h-16 md:h-20 object-contain"
+          onError={(e) => e.target.style.display = 'none'}
+        />
+      </div>
+
+      {/* HERO HEADER */}
+      <header className="bg-gradient-to-br from-orange-500 to-orange-600 text-white pt-10 pb-24 px-4 shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-400 opacity-20 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-2 drop-shadow-sm">
+            1er Foro Nacional
+          </h1>
+          <p className="text-orange-100 text-lg md:text-xl font-light">
+            Líderes y Lideresas por la Seguridad Vial
+          </p>
+          <div className="flex justify-center mt-6 space-x-4 text-sm font-medium bg-white/10 backdrop-blur-md p-3 rounded-full inline-flex mx-auto border border-white/20">
+             <div className="flex items-center"><Calendar className="w-4 h-4 mr-1" /> 24 Nov 2025</div>
+             <div className="w-px bg-white/30 h-4"></div>
+             <div className="flex items-center"><MapPin className="w-4 h-4 mr-1" /> Bogotá D.C.</div>
+          </div>
+        </div>
+      </header>
+
+      {/* INSTRUCTIONS SECTION */}
+      <div className="max-w-4xl mx-auto px-4 -mt-12 relative z-20 mb-8">
+          <div className="bg-white rounded-2xl shadow-xl border-l-8 border-orange-400 p-6 flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div className="bg-orange-100 p-3 rounded-full text-orange-600 flex-shrink-0">
+                  <Info className="w-8 h-8" />
+              </div>
+              <div className="flex-1">
+                  <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center">
+                      Agenda y toma de memorias
+                  </h3>
+                  <div className="text-slate-600 text-sm space-y-2">
+                      <p>
+                          <strong>Lo que puedes hacer:</strong> Marcar actividades de interés, tomar notas y agregar múltiples fotos por sesión.
+                      </p>
+                      <p className="flex items-start text-orange-700 font-medium bg-orange-50 p-2 rounded-lg">
+                          <AlertTriangle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                          <span>
+                              <strong>¡Importante!</strong> La información se guarda temporalmente en este navegador. 
+                              Si cierras la pestaña o actualizas la página, <strong>perderás tus notas y fotos</strong>. 
+                              Por favor, descarga tu PDF ("Descargar Memorias") antes de salir.
+                          </span>
+                      </p>
+                  </div>
+              </div>
+              <button 
+                  onClick={downloadPDF}
+                  className="hidden md:flex items-center bg-slate-800 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-slate-900 transition-colors"
+              >
+                  <Download className="w-4 h-4 mr-2" />
+                  Probar PDF
+              </button>
+          </div>
+      </div>
+
+      {/* TABS & MAIN CONTENT */}
+      <main className="max-w-6xl mx-auto px-4 relative z-20 pb-24">
+        
+        <div className="flex justify-center mb-8">
+          <div className="bg-white p-1.5 rounded-2xl shadow-xl flex flex-wrap md:flex-nowrap gap-2 w-full max-w-2xl">
+            <button
+              onClick={() => setActiveTab('foro')}
+              className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${
+                activeTab === 'foro' 
+                  ? 'bg-orange-500 text-white shadow-md transform scale-105' 
+                  : 'text-slate-500 hover:bg-slate-50'
+              }`}
+            >
+              <Users className="w-5 h-5 mr-2" />
+              Foro Nacional
+            </button>
+            <button
+              onClick={() => setActiveTab('mujeres')}
+              className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${
+                activeTab === 'mujeres' 
+                  ? 'bg-purple-600 text-white shadow-md transform scale-105' 
+                  : 'text-slate-500 hover:bg-slate-50'
+              }`}
+            >
+              <Award className="w-5 h-5 mr-2" />
+              Encuentro Mujeres
+            </button>
+             <button
+              onClick={() => setActiveTab('contactos')}
+              className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${
+                activeTab === 'contactos' 
+                  ? 'bg-blue-600 text-white shadow-md transform scale-105' 
+                  : 'text-slate-500 hover:bg-slate-50'
+              }`}
+            >
+              <Briefcase className="w-5 h-5 mr-2" />
+              Mis Contactos
+            </button>
+          </div>
+        </div>
+
+        <div className="transition-opacity duration-300 min-h-[600px]">
+           
+           {activeTab === 'foro' && (
+              <div className="animate-fade-in-up">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                      {mainAgendaData.map((item) => (
+                          <FlipCard 
+                              key={item.id} 
+                              item={item} 
+                              note={notes[item.id] || ''}
+                              onNoteChange={handleNoteChange}
+                              status={activityStatus[item.id]}
+                              onStatusChange={handleStatusChange}
+                              isFlipped={!!flippedState[item.id]}
+                              onFlip={() => handleFlip(item.id)}
+                              photos={photos[item.id] || []}
+                              onPhotoAdd={handlePhotoAdd}
+                              onPhotoRemove={handlePhotoRemove}
+                              colorTheme="orange"
+                          />
+                      ))}
+                  </div>
+              </div>
+           )}
+
+           {activeTab === 'mujeres' && (
+              <div className="animate-fade-in-up">
+                  <div className="bg-purple-100 border-l-4 border-purple-500 p-4 rounded-r-lg mb-8 flex items-start shadow-sm">
+                      <Layout className="w-6 h-6 text-purple-600 mr-3 mt-1" />
+                      <div>
+                          <h3 className="font-bold text-purple-900">Agenda Paralela</h3>
+                          <p className="text-purple-700 text-sm">Este encuentro se realiza simultáneamente con el Foro Nacional.</p>
+                      </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                      {womenAgendaData.map((item) => (
+                          <FlipCard 
+                              key={item.id} 
+                              item={item} 
+                              note={notes[item.id] || ''}
+                              onNoteChange={handleNoteChange}
+                              status={activityStatus[item.id]}
+                              onStatusChange={handleStatusChange}
+                              isFlipped={!!flippedState[item.id]}
+                              onFlip={() => handleFlip(item.id)}
+                              photos={photos[item.id] || []}
+                              onPhotoAdd={handlePhotoAdd}
+                              onPhotoRemove={handlePhotoRemove}
+                              colorTheme="purple"
+                          />
+                      ))}
+                  </div>
+              </div>
+           )}
+
+           {activeTab === 'contactos' && (
+               <div className="animate-fade-in-up max-w-4xl mx-auto">
+                    <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 mb-8">
+                        <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                            <PlusCircle className="w-6 h-6 text-blue-600 mr-2" />
+                            Añadir Nuevo Contacto
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <input 
+                                type="text" 
+                                placeholder="Nombre Completo"
+                                className="p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none w-full"
+                                value={newContact.name}
+                                onChange={(e) => setNewContact({...newContact, name: e.target.value})}
+                            />
+                            <input 
+                                type="text" 
+                                placeholder="Organización / Rol"
+                                className="p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none w-full"
+                                value={newContact.org}
+                                onChange={(e) => setNewContact({...newContact, org: e.target.value})}
+                            />
+                            <input 
+                                type="text" 
+                                placeholder="Celular o Email"
+                                className="p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none w-full"
+                                value={newContact.info}
+                                onChange={(e) => setNewContact({...newContact, info: e.target.value})}
+                            />
+                        </div>
+                        <button 
+                            onClick={handleAddContact}
+                            disabled={!newContact.name}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                        >
+                            <Save className="w-5 h-5 mr-2" />
+                            Guardar Contacto
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {contacts.length === 0 ? (
+                            <div className="col-span-full text-center py-10 text-slate-400">
+                                <Users className="w-16 h-16 mx-auto mb-4 opacity-20" />
+                                <p>Aún no has añadido contactos.</p>
+                                <p className="text-sm">¡Aprovecha el networking y regístralos aquí!</p>
+                            </div>
+                        ) : (
+                            contacts.map(contact => (
+                                <div key={contact.id} className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-blue-500 flex justify-between items-start hover:shadow-lg transition-shadow">
+                                    <div>
+                                        <h4 className="font-bold text-lg text-slate-800">{contact.name}</h4>
+                                        <div className="flex items-center text-slate-500 text-sm mt-1">
+                                            <Briefcase className="w-3 h-3 mr-2" />
+                                            {contact.org || 'Sin organización'}
+                                        </div>
+                                        <div className="flex items-center text-slate-500 text-sm mt-1">
+                                            <Phone className="w-3 h-3 mr-2" />
+                                            {contact.info || 'Sin contacto'}
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => handleDeleteContact(contact.id)}
+                                        className="text-red-300 hover:text-red-500 transition-colors p-2"
+                                    >
+                                        <Trash2 className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+               </div>
+           )}
+
+        </div>
+
+        <div className="mt-16 bg-white rounded-3xl shadow-xl p-8 border border-slate-100 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-2 h-full bg-orange-400"></div>
+            <div className="relative z-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
+                    ¿Qué me queda del evento?
+                </h2>
+                <p className="text-slate-500 mb-6">
+                    Tómate un momento para escribir tus aprendizajes más valiosos. Esto se incluirá en tu PDF.
+                </p>
+                <textarea
+                    value={finalReflection}
+                    onChange={(e) => setFinalReflection(e.target.value)}
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none min-h-[150px] text-slate-700 shadow-inner transition-all hover:bg-white"
+                    placeholder="Mis mayores aprendizajes hoy fueron..."
+                />
+            </div>
+            <Heart className="absolute -bottom-6 -right-6 w-40 h-40 text-orange-50 opacity-50 transform rotate-12" />
+        </div>
+      </main>
+
+      <button 
+          onClick={downloadPDF}
+          className="fixed bottom-8 right-8 z-50 bg-slate-900 hover:bg-black text-white p-5 rounded-full shadow-2xl flex items-center transition-all hover:scale-105 hover:rotate-2 active:scale-95 group"
+          title="Generar Memorias PDF"
+      >
+          <Download className="w-6 h-6 group-hover:animate-bounce" />
+          <span className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-3 transition-all duration-500 whitespace-nowrap font-bold text-lg">
+              Descargar Memorias
+          </span>
+      </button>
+    </div>
+  );
+}
