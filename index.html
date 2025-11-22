@@ -98,31 +98,32 @@
           Clock, User, RotateCcw, Pencil, Download, MapPin, Calendar, Mic, Users, 
           Coffee, Award, MessageSquare, CheckCircle, Star, Layout, Heart, Camera, 
           Trash2, PlusCircle, Briefcase, Phone, Save, Info, AlertTriangle, Link, ExternalLink,
-          Radio, ArrowUp, Target, MonitorPlay, Zap, Square, Play, Volume2, MicOff, FileCode
+          Radio, ArrowUp, Target, MonitorPlay, Zap, Square, Play, Volume2, MicOff, FileCode,
+          GitMerge
         } from 'https://esm.sh/lucide-react@0.263.1';
 
         // --- DATA SOURCE ---
         const mainAgendaData = [
           { id: 'm0', time: '07:30 - 08:00', duration: '30 min', title: 'Registro y Acreditación', moderator: 'Equipo logístico REDIPI', description: 'Registro de participantes presenciales y entrega de escarapelas con QR.', icon: 'check' },
           { id: 'm1', time: '08:00 - 08:10', duration: '10 min', title: 'Instalación Oficial', moderator: 'Representante ANSV / Maestro de ceremonias', description: 'Acto protocolario, himnos y palabras de apertura.', icon: 'mic' },
-          { id: 'm2', time: '08:10 - 08:50', duration: '40 min', title: 'Innovación, Tecnología y Liderazgo Empresarial', moderator: 'Daniel Villaveces', description: 'Vehículos seguros, infraestructura inteligente y liderazgo en gestión.', icon: 'lightbulb' },
-          { id: 'm3', time: '08:50 - 09:40', duration: '50 min', title: 'Socialización Iniciativas (Bloque 1)', moderator: 'Líderes/as Ponentes', description: 'Presentación de proyectos ganadores (5 presentaciones).', icon: 'users' },
+          { id: 'm2', time: '08:10 - 08:50', duration: '40 min', title: 'Ponencia: Innovación, Tecnología y Liderazgo Empresarial', moderator: 'Daniel Villaveces', description: 'Vehículos seguros, infraestructura inteligente y liderazgo en gestión.', icon: 'lightbulb' },
+          { id: 'm3', time: '08:50 - 09:40', duration: '50 min', title: 'Socialización Iniciativas Top 10 (Bloque 1)', moderator: 'Líderes/as Ponentes', description: 'Presentación de proyectos ganadores (5 presentaciones).', icon: 'users' },
           { id: 'm4', time: '09:40 - 10:00', duration: '20 min', title: 'Pausa Activa y Networking', moderator: 'Equipo logístico', description: 'Disparador de conversación: logros y desafíos.', icon: 'coffee' },
-          { id: 'm5', time: '10:00 - 10:40', duration: '40 min', title: 'Liderazgo Comunitario y Cultural', moderator: 'Sandra Milena Tapias', description: 'Liderazgo de la sociedad civil, víctimas y transformación cultural.', icon: 'heart' },
-          { id: 'm6', time: '10:40 - 11:30', duration: '50 min', title: 'Socialización Iniciativas (Bloque 2)', moderator: 'Líderes/as Ponentes', description: 'Continuación de presentación de proyectos ganadores.', icon: 'users' },
+          { id: 'm5', time: '10:00 - 10:40', duration: '40 min', title: 'Ponencia: Liderazgo Comunitario y Cultural', moderator: 'Sandra Milena Tapias', description: 'Liderazgo de la sociedad civil, víctimas y transformación cultural.', icon: 'heart' },
+          { id: 'm6', time: '10:40 - 11:30', duration: '50 min', title: 'Socialización Iniciativas  Top 10 (Bloque 2)', moderator: 'Líderes/as Ponentes', description: 'Continuación de presentación de proyectos ganadores.', icon: 'users' },
           { id: 'm7', time: '11:30 - 12:10', duration: '50 min', title: 'Taller: Fortalecimiento de la Red', moderator: 'Facilitador/a REDIPI', description: 'Dinámica "Conectemos nuestros liderazgos" y compromisos de Red.', icon: 'puzzle' },
           { id: 'm8', time: '12:10 - 13:40', duration: '90 min', title: 'Almuerzo Libre', moderator: '-', description: 'Tiempo libre para alimentación.', icon: 'coffee' },
-          { id: 'm9', time: '13:40 - 14:20', duration: '40 min', title: 'Liderazgo Gubernamental y Gobernanza', moderator: 'Aida Luz Ospina', description: 'Estrategia Nacional y coordinación intersectorial.', icon: 'building' },
+          { id: 'm9', time: '13:40 - 14:20', duration: '40 min', title: 'Ponencia: Liderazgo Gubernamental y Gobernanza', moderator: 'Aida Luz Ospina', description: 'Estrategia Nacional y coordinación intersectorial.', icon: 'building' },
           { id: 'm10', time: '14:20 - 14:40', duration: '20 min', title: 'Pausa Café y Networking Libre', moderator: 'Equipo logístico', description: 'Espacio distendido para interacción espontánea.', icon: 'coffee' },
           { id: 'm11', time: '14:40 - 15:40', duration: '60 min', title: 'Panel: Liderazgos Transformadores', moderator: 'Rep. ANSV (Modera) / 3 Expertos', description: 'Conversatorio sobre cualidades del líder y experiencias de éxito.', icon: 'mic' },
-          { id: 'm12', time: '15:40 - 16:15', duration: '35 min', title: 'Socialización Iniciativas (Bloque 3)', moderator: 'Líderes/as Ponentes', description: 'Proyectos con reconocimiento especial.', icon: 'star' },
-          { id: 'm13', time: '16:15 - 16:45', duration: '30 min', title: 'Entrega de Certificados', moderator: 'Rep. ANSV / Maestro de ceremonias', description: 'Reconocimiento al Top 10 y entrega de certificados.', icon: 'award' },
+          { id: 'm12', time: '15:40 - 16:15', duration: '35 min', title: 'Socialización Iniciativas Top 50 (Bloque 3)', moderator: 'Líderes/as Ponentes', description: 'Proyectos con reconocimiento especial.', icon: 'star' },
+          { id: 'm13', time: '16:15 - 16:45', duration: '30 min', title: 'Entrega de Reconocimientos', moderator: 'Rep. ANSV / Maestro de ceremonias', description: 'Reconocimiento al Top 10 y entrega de certificados.', icon: 'award' },
           { id: 'm14', time: '16:45 - 17:00', duration: '15 min', title: 'Cierre del Evento', moderator: 'Rep. ANSV / Facilitador REDIPI', description: 'Conclusiones y resultados del proceso formativo.', icon: 'flag' }
         ];
 
         const womenAgendaData = [
-          { id: 'w1', time: '10:00 - 10:05', duration: '5 min', title: 'Bienvenida Encuentro Mujeres', moderator: 'Facilitadora REDIPI', description: 'Apertura guiada y conexión a sala digital.', icon: 'heart' },
-          { id: 'w2', time: '10:05 - 10:25', duration: '20 min', title: 'Mapa Digital: Modos de Movilidad', moderator: 'Facilitadora REDIPI', description: 'Cartografía colaborativa sobre cargas del cuidado y rutas poligonales.', icon: 'map' },
+          { id: 'w1', time: '10:00 - 10:05', duration: '5 min', title: 'Inicio Taller-Conversatorio Encuentro Mujeres', moderator: 'Facilitadora REDIPI', description: 'Apertura guiada y conexión a sala digital.', icon: 'heart' },
+          { id: 'w2', time: '10:05 - 10:25', duration: '20 min', title: 'Nuestros Modos de Movilidad', moderator: 'Facilitadora REDIPI', description: 'Cartografía colaborativa sobre cargas del cuidado y rutas poligonales.', icon: 'map' },
           { id: 'w3', time: '10:25 - 10:40', duration: '15 min', title: 'Identificación de Barreras Invisibles', moderator: 'Facilitadora REDIPI', description: 'Análisis de riesgos y cifras ANSV con enfoque de género.', icon: 'alert' },
           { id: 'w4', time: '10:40 - 10:55', duration: '15 min', title: 'Testimonios: Rutas que Inspiran', moderator: 'Lideresas invitadas', description: 'Narrativa testimonial y escucha activa.', icon: 'message' },
           { id: 'w5', time: '10:55 - 11:15', duration: '20 min', title: 'Co-creación: Territorio que Cuida', moderator: 'Facilitadora + Grupos', description: 'Diseño participativo de soluciones.', icon: 'users' },
@@ -161,7 +162,43 @@
             return { current, next };
         };
 
+        // Función para mezclar y ordenar eventos para la línea de tiempo
+        const getMergedTimelineEvents = () => {
+            const foro = mainAgendaData.map(i => ({ ...i, type: 'foro', startTime: parseTime(i.time.split(' - ')[0]) }));
+            const mujeres = womenAgendaData.map(i => ({ ...i, type: 'mujeres', startTime: parseTime(i.time.split(' - ')[0]) }));
+            return [...foro, ...mujeres].sort((a, b) => a.startTime - b.startTime);
+        };
+
         // --- COMPONENTS ---
+
+        // Nuevo Componente Simplificado para la Línea de Tiempo
+        const TimelineItem = ({ item, align, isCurrent }) => {
+            const isLeft = align === 'left';
+            const colorClasses = isLeft 
+                ? 'bg-white border-l-4 border-orange-500 text-slate-800' 
+                : 'bg-white border-r-4 border-purple-500 text-slate-800';
+            
+            const timeColor = isLeft ? 'text-orange-600 bg-orange-50' : 'text-purple-600 bg-purple-50';
+            const activeClass = isCurrent ? 'ring-2 ring-orange-400 shadow-lg scale-[1.02]' : 'shadow-sm hover:shadow-md';
+
+            return (
+                <div className={`p-4 rounded-lg transition-all duration-300 ${colorClasses} ${activeClass}`}>
+                    <div className={`flex flex-col ${isLeft ? 'items-start' : 'items-end'}`}>
+                        <span className={`text-xs font-bold px-2 py-1 rounded mb-2 ${timeColor}`}>
+                            {item.time}
+                        </span>
+                        <h4 className={`font-bold text-sm md:text-base leading-tight ${isLeft ? 'text-left' : 'text-right'}`}>
+                            {item.title}
+                        </h4>
+                        {isCurrent && (
+                            <span className="mt-2 text-[10px] font-bold text-red-500 flex items-center animate-pulse">
+                                🔴 EN CURSO
+                            </span>
+                        )}
+                    </div>
+                </div>
+            );
+        };
 
         // 1. Botón Volver al Inicio
         const ScrollToTopButton = () => {
@@ -286,7 +323,7 @@
           );
         };
 
-        // CARD COMPONENT
+        // CARD COMPONENT (Original para las pestañas detalladas)
         const FlipCard = ({ 
             item, 
             note, 
@@ -338,15 +375,12 @@
 
                 mediaRecorderRef.current.onstop = () => {
                     const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                    
-                    // Convertir a Base64 inmediatamente para almacenamiento persistente
                     const reader = new FileReader();
                     reader.readAsDataURL(audioBlob);
                     reader.onloadend = () => {
                         const base64Audio = reader.result;
                         onAudioAdd(item.id, base64Audio);
                     };
-                    
                     stream.getTracks().forEach(track => track.stop());
                 };
 
@@ -546,7 +580,7 @@
 
         // --- MAIN APP ---
         function App() {
-          const [activeTab, setActiveTab] = useState('foro');
+          const [activeTab, setActiveTab] = useState('timeline'); // Iniciar en línea de tiempo
           const [notes, setNotes] = useState({});
           const [activityStatus, setActivityStatus] = useState({}); 
           const [photos, setPhotos] = useState({}); 
@@ -556,6 +590,7 @@
           const [contacts, setContacts] = useState([]);
           const [newContact, setNewContact] = useState({ name: '', org: '', info: '' });
           const [jsPDFInstance, setJsPDFInstance] = useState(null);
+          const [timelineEvents, setTimelineEvents] = useState([]);
           
           const [currentEventStatus, setCurrentEventStatus] = useState({ current: null, next: null });
 
@@ -564,12 +599,18 @@
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
             script.onload = () => { setJsPDFInstance(window.jspdf); };
             document.body.appendChild(script);
+            
+            // Cargar eventos de línea de tiempo
+            setTimelineEvents(getMergedTimelineEvents());
           }, []);
 
           useEffect(() => {
               const timer = setInterval(() => {
                   const now = new Date();
                   const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                  // En modo timeline, usamos los eventos mezclados para calcular el estado
+                  // Pero para mantener consistencia con la vista actual, podemos usar el array unificado
+                  // O simplemente dejar que el live ticker use mainAgenda por defecto si está en timeline
                   const data = activeTab === 'mujeres' ? womenAgendaData : mainAgendaData;
                   setCurrentEventStatus(getCurrentEventStatus(data, currentMinutes));
               }, 1000);
@@ -699,18 +740,39 @@
                 contacts.forEach(c => {
                     checkPageBreak(25); doc.setDrawColor(...colors.blue); doc.setLineWidth(0.5); doc.rect(15, y, 180, 20); doc.setFillColor(...colors.blue); doc.rect(15, y, 5, 20, 'F');
                     doc.setTextColor(...colors.dark); doc.setFontSize(11); doc.setFont("helvetica", "bold"); doc.text(c.name, 25, y + 7);
-                    doc.setTextColor(...colors.gray); doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.text(`${c.org} | ${c.info}`, 25, y + 14); y += 25;
+                    doc.setTextColor(...colors.gray); doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.text(`${c.org} | ${c.info}`, 25, y + 14);
+                    
+                    y += 25;
                 });
             }
 
             if (finalReflection.trim().length > 0) {
-                checkPageBreak(50); doc.setDrawColor(...colors.orange); doc.setLineWidth(1); doc.rect(15, y, 180, 40);
-                doc.setTextColor(...colors.orange); doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("¿Qué me queda del evento?", 20, y + 10);
-                doc.setTextColor(...colors.dark); doc.setFontSize(11); doc.setFont("helvetica", "italic"); doc.text(doc.splitTextToSize(finalReflection, 170), 20, y + 20);
+                checkPageBreak(50);
+                
+                doc.setDrawColor(...colors.orange);
+                doc.setLineWidth(1);
+                doc.rect(15, y, 180, 40);
+                
+                doc.setTextColor(...colors.orange);
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text("¿Qué me queda del evento?", 20, y + 10);
+                
+                doc.setTextColor(...colors.dark);
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "italic");
+                const splitReflect = doc.splitTextToSize(finalReflection, 170);
+                doc.text(splitReflect, 20, y + 20);
             }
 
             const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) { doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150); doc.text(`Página ${i} de ${pageCount}`, 195, 290, null, null, "right"); }
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text(`Página ${i} de ${pageCount}`, 195, 290, null, null, "right");
+            }
+
             doc.save("Memorias_Foro_Seguridad_Vial.pdf");
           };
 
@@ -875,16 +937,16 @@
                               <p><strong>Lo que puedes hacer:</strong> Marcar actividades de interés, tomar notas, grabar audio y agregar múltiples fotos por sesión.</p>
                               <p className="flex items-start text-orange-700 font-medium bg-orange-50 p-2 rounded-lg">
                                   <AlertTriangle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
-                                  <span><strong>¡Importante!</strong> La información se guarda temporalmente. Descarga tus memorias antes de salir.</span>
+                                  <span><strong>¡Importante!</strong> La información se guarda temporalmente en este navegador. Si cierras la pestaña o actualizas la página, <strong>perderás tus notas y fotos</strong>. Por favor, descarga tu PDF antes de salir.</span>
                               </p>
                           </div>
                       </div>
                       <div className="flex flex-col gap-2">
                           <button onClick={downloadPDF} className="flex items-center justify-center bg-slate-800 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-slate-900 transition-colors w-full">
-                              <Download className="w-4 h-4 mr-2" />PDF
+                              <Download className="w-4 h-4 mr-2" />PDF (sin notas de voz)
                           </button>
                           <button onClick={downloadHTML} className="flex items-center justify-center bg-purple-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-purple-700 transition-colors w-full">
-                              <FileCode className="w-4 h-4 mr-2" />HTML (Audio)
+                              <FileCode className="w-4 h-4 mr-2" />HTML (incluye notas de voz)
                           </button>
                       </div>
                   </div>
@@ -893,14 +955,39 @@
               {/* MAIN CONTENT */}
               <main className="max-w-6xl mx-auto px-4 relative z-20 pb-24">
                 <div className="flex justify-center mb-8">
-                  <div className="bg-white p-1.5 rounded-2xl shadow-xl flex flex-wrap md:flex-nowrap gap-2 w-full max-w-2xl">
-                    <button onClick={() => setActiveTab('foro')} className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'foro' ? 'bg-orange-500 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Users className="w-5 h-5 mr-2" />Foro Nacional</button>
-                    <button onClick={() => setActiveTab('mujeres')} className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'mujeres' ? 'bg-purple-600 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Award className="w-5 h-5 mr-2" />Encuentro Mujeres</button>
-                    <button onClick={() => setActiveTab('contactos')} className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'contactos' ? 'bg-blue-600 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Briefcase className="w-5 h-5 mr-2" />Mis Contactos</button>
+                  <div className="bg-white p-1.5 rounded-2xl shadow-xl flex flex-wrap gap-2 w-full max-w-3xl justify-center">
+                    <button onClick={() => setActiveTab('timeline')} className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'timeline' ? 'bg-blue-500 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><GitMerge className="w-5 h-5 mr-2" />Línea de Tiempo</button>
+                    <button onClick={() => setActiveTab('foro')} className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'foro' ? 'bg-orange-500 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Users className="w-5 h-5 mr-2" />Foro Nacional</button>
+                    <button onClick={() => setActiveTab('mujeres')} className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'mujeres' ? 'bg-purple-600 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Award className="w-5 h-5 mr-2" />Encuentro Mujeres</button>
+                    <button onClick={() => setActiveTab('contactos')} className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 flex items-center justify-center ${activeTab === 'contactos' ? 'bg-blue-600 text-white shadow-md transform scale-105' : 'text-slate-500 hover:bg-slate-50'}`}><Briefcase className="w-5 h-5 mr-2" />Mis Contactos</button>
                   </div>
                 </div>
 
                 <div className="transition-opacity duration-300 min-h-[600px]">
+                   {/* VISTA LÍNEA DE TIEMPO */}
+                   {activeTab === 'timeline' && (
+                      <div className="animate-fade-in-up max-w-4xl mx-auto">
+                          <div className="text-center mb-8 text-slate-500 text-sm italic">Vista unificada: Eventos del Foro a la izquierda (Naranja), Encuentro de Mujeres a la derecha (Morado).</div>
+                          <div className="flex flex-col gap-8 relative">
+                              {/* Línea central decorativa (visible en desktop) */}
+                              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-300 transform -translate-x-1/2 z-0"></div>
+                              
+                              {timelineEvents.map((item) => (
+                                  <div key={item.id} className={`flex w-full relative z-10 ${item.type === 'foro' ? 'justify-start' : 'justify-end'}`}>
+                                      {/* En móvil se ven apilados, en desktop se ve como chat */}
+                                      <div className={`w-full md:w-[48%] ${item.type === 'mujeres' && 'md:ml-auto'}`}>
+                                          <TimelineItem 
+                                              item={item} 
+                                              align={item.type === 'foro' ? 'left' : 'right'} 
+                                              isCurrent={currentEventStatus.current?.id === item.id} 
+                                          />
+                                      </div>
+                                  </div>
+                              ))}
+                          </div>
+                      </div>
+                   )}
+
                    {activeTab === 'foro' && (
                       <div className="animate-fade-in-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                           {mainAgendaData.map((item) => <FlipCard key={item.id} item={item} note={notes[item.id] || ''} onNoteChange={handleNoteChange} status={activityStatus[item.id]} onStatusChange={handleStatusChange} isFlipped={!!flippedState[item.id]} onFlip={() => handleFlip(item.id)} photos={photos[item.id] || []} onPhotoAdd={handlePhotoAdd} onPhotoRemove={handlePhotoRemove} audios={audios[item.id] || []} onAudioAdd={handleAudioAdd} onAudioRemove={handleAudioRemove} colorTheme="orange" isCurrent={currentEventStatus.current?.id === item.id} />)}
@@ -947,9 +1034,18 @@
                 <div className="mt-16 bg-white rounded-3xl shadow-xl p-8 border border-slate-100 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-2 h-full bg-orange-400"></div>
                     <div className="relative z-10">
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">¿Qué me queda del evento?</h2>
-                        <p className="text-slate-500 mb-6">Tómate un momento para escribir tus aprendizajes más valiosos. Esto se incluirá en tu PDF.</p>
-                        <textarea value={finalReflection} onChange={(e) => setFinalReflection(e.target.value)} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none min-h-[150px] text-slate-700 shadow-inner transition-all hover:bg-white" placeholder="Mis mayores aprendizajes hoy fueron..." />
+                        <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
+                            ¿Qué me queda del evento?
+                        </h2>
+                        <p className="text-slate-500 mb-6">
+                            Tómate un momento para escribir tus aprendizajes más valiosos. Esto se incluirá en tu PDF.
+                        </p>
+                        <textarea
+                            value={finalReflection}
+                            onChange={(e) => setFinalReflection(e.target.value)}
+                            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none min-h-[150px] text-slate-700 shadow-inner transition-all hover:bg-white"
+                            placeholder="Mis mayores aprendizajes hoy fueron..."
+                        />
                     </div>
                     <Heart className="absolute -bottom-6 -right-6 w-40 h-40 text-orange-50 opacity-50 transform rotate-12" />
                 </div>
